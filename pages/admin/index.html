@@ -13,69 +13,79 @@
         <img src="../../images/logo-lp3i.png" alt="Logo" class="mx-auto mb-4 w-32 h-auto">
 
     </header>
+    <section>
+        <div class="lg:w-1/3">
+          <h2 class="text-2xl font-bold mb-4">Tambah Kategori</h2>
+          <form id="category-form">
+            <div>
+              <label for="new-category" class="block text-sm font-medium text-gray-700">Kategori Baru:</label>
+              <input type="text" id="new-category" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
+            </div>
+            <button type="submit" class="w-full bg-green-500 text-white py-2 rounded-md mt-4">Kirim</button>
+          </form>
+        </div>
+    </section>
     
-      <h1 class="text-3xl font-bold text-center my-4">Admin Produk</h1>
-    <div class="flex flex-col lg:flex-row justify-between mb-4">
-      <div class="lg:w-2/3">
-        <h2 class="text-2xl font-bold mb-4">Tambah Produk</h2>
-        <form id="product-form" class="space-y-4">
-          <input type="hidden" id="product-id">
-          <div>
-            <label for="product-name" class="block text-sm font-medium text-gray-700">Nama:</label>
-            <input type="text" id="product-name" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
+    <section>
+      <!-- <h1 class="text-2xl font-bold  my-4">Admin Produk</h1> -->
+       <br>
+      <div class="flex flex-col lg:flex-row justify-between mb-4">
+        <div class="lg:w-1/3">
+          <h2 class="text-2xl font-bold mb-4">Tambah Produk</h2>
+          <form id="product-form" class="space-y-4">
+            <input type="hidden" id="product-id">
+            <div>
+              <label for="product-name" class="block text-sm font-medium text-gray-700">Nama:</label>
+              <input type="text" id="product-name" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
+            </div>
+            <div>
+              <label for="product-price" class="block text-sm font-medium text-gray-700">Harga:</label>
+              <input type="number" id="product-price" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
+            </div>
+            <div>
+              <label for="product-category" class="block text-sm font-medium text-gray-700">Kategori:</label>
+              <select id="product-category" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
+                <!-- Options will be populated by JavaScript -->
+              </select>
+            </div>
+            <div>
+              <label for="product-description" class="block text-sm font-medium text-gray-700">Deskripsi:</label>
+              <textarea id="product-description" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"></textarea>
+            </div>
+            <div>
+              <label for="product-image" class="block text-sm font-medium text-gray-700">Link Gambar:</label>
+              <input type="text" id="product-image" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm" placeholder="https://">
+            </div>
+            <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-md">Kirim</button>
+          </form>
+        </div>
+        
+        <div>
+          <h2 class="text-5xl font-bold text-center mb-4">Daftar Produk</h2>
+            <div class="lg:w-3/3">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gambar</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-product-list" class="bg-white divide-y divide-gray-200">
+                  <!-- Product List Items will be populated by JavaScript -->
+                </tbody>
+              </table>
+            </div>
           </div>
-          <div>
-            <label for="product-price" class="block text-sm font-medium text-gray-700">Harga:</label>
-            <input type="number" id="product-price" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
-          </div>
-          <div>
-            <label for="product-category" class="block text-sm font-medium text-gray-700">Kategori:</label>
-            <select id="product-category" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
-              <!-- Options will be populated by JavaScript -->
-            </select>
-          </div>
-          <div>
-            <label for="product-description" class="block text-sm font-medium text-gray-700">Deskripsi:</label>
-            <textarea id="product-description" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"></textarea>
-          </div>
-          <div>
-            <label for="product-image" class="block text-sm font-medium text-gray-700">Link Gambar:</label>
-            <input type="text" id="product-image" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm" placeholder="https://">
-          </div>
-          <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-md">Kirim</button>
-        </form>
+        </div>
       </div>
-      <div class="lg:w-1/3 mt-8 lg:mt-0 lg:ml-4">
-        <h2 class="text-2xl font-bold mb-4">Tambah Kategori</h2>
-        <form id="category-form">
-          <div>
-            <label for="new-category" class="block text-sm font-medium text-gray-700">Kategori Baru:</label>
-            <input type="text" id="new-category" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
-          </div>
-          <button type="submit" class="w-full bg-green-500 text-white py-2 rounded-md mt-4">Kirim</button>
-        </form>
-      </div>
-    </div>
-    <div class="bg-white rounded-lg shadow-md p-4">
-      <h2 class="text-2xl font-bold mb-4">Daftar Produk</h2>
-      <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gambar</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
-            </tr>
-          </thead>
-          <tbody id="admin-product-list" class="bg-white divide-y divide-gray-200">
-            <!-- Product List Items will be populated by JavaScript -->
-          </tbody>
-        </table>
-      </div>
-    </div>
+
+        
+    </section>
+      
     
   </div>
 
