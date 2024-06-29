@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Produk</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+  <div class="container mx-auto p-4">
+    <header class="text-center my-4 bg-gray-300 p-4">
+ 
+        <img src="../../images/logo-lp3i.png" alt="Logo" class="mx-auto mb-4 w-32 h-auto">
+
+    </header>
+    
+      <h1 class="text-3xl font-bold text-center my-4">Admin Produk</h1>
+    <div class="flex flex-col lg:flex-row justify-between mb-4">
+      <div class="lg:w-2/3">
+        <h2 class="text-2xl font-bold mb-4">Tambah Produk</h2>
+        <form id="product-form" class="space-y-4">
+          <input type="hidden" id="product-id">
+          <div>
+            <label for="product-name" class="block text-sm font-medium text-gray-700">Nama:</label>
+            <input type="text" id="product-name" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
+          </div>
+          <div>
+            <label for="product-price" class="block text-sm font-medium text-gray-700">Harga:</label>
+            <input type="number" id="product-price" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
+          </div>
+          <div>
+            <label for="product-category" class="block text-sm font-medium text-gray-700">Kategori:</label>
+            <select id="product-category" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
+              <!-- Options will be populated by JavaScript -->
+            </select>
+          </div>
+          <div>
+            <label for="product-description" class="block text-sm font-medium text-gray-700">Deskripsi:</label>
+            <textarea id="product-description" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"></textarea>
+          </div>
+          <div>
+            <label for="product-image" class="block text-sm font-medium text-gray-700">Link Gambar:</label>
+            <input type="text" id="product-image" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm" placeholder="https://">
+          </div>
+          <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-md">Kirim</button>
+        </form>
+      </div>
+      <div class="lg:w-1/3 mt-8 lg:mt-0 lg:ml-4">
+        <h2 class="text-2xl font-bold mb-4">Tambah Kategori</h2>
+        <form id="category-form">
+          <div>
+            <label for="new-category" class="block text-sm font-medium text-gray-700">Kategori Baru:</label>
+            <input type="text" id="new-category" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
+          </div>
+          <button type="submit" class="w-full bg-green-500 text-white py-2 rounded-md mt-4">Kirim</button>
+        </form>
+      </div>
+    </div>
+    <div class="bg-white rounded-lg shadow-md p-4">
+      <h2 class="text-2xl font-bold mb-4">Daftar Produk</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gambar</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="admin-product-list" class="bg-white divide-y divide-gray-200">
+            <!-- Product List Items will be populated by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const productForm = document.getElementById('product-form');
+      const productName = document.getElementById('product-name');
+      const productPrice = document.getElementById('product-price');
+      const productCategory = document.getElementById('product-category');
+      const productDescription = document.getElementById('product-description');
+      const productImage = document.getElementById('product-image');
+      const productId = document.getElementById('product-id');
+      const adminProductList = document.getElementById('admin-product-list');
+      const categoryForm = document.getElementById('category-form');
+      const newCategoryInput = document.getElementById('new-category');
+
+      // Function to fetch and populate categories
+      function fetchCategories() {
+        fetch('http://localhost:3000/categories')
+          .then(response => response.json())
+          .then(categories => {
+            categories.forEach(category => {
+              const option = document.createElement('option');
+              option.value = category.name; // Menggunakan nama kategori sebagai value
+              option.textContent = category.name;
+              productCategory.appendChild(option);
+            });
+          });
+      }
+
+      // Function to add new category
+      function addCategory(categoryName) {
+        const newCategory = { name: categoryName };
+        fetch('http://localhost:3000/categories', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newCategory),
+        })
+          .then(response => response.json())
+          .then(() => {
+            // Clear and repopulate category dropdown
+            productCategory.innerHTML = ''; // Clear existing options
+            fetchCategories(); // Repopulate with updated categories
+          });
+      }
+
+      // Event listener for form submission (product)
+      productForm.addEventListener('submit', event => {
+        event.preventDefault();
+        const product = {
+          name: productName.value,
+          price: parseFloat(productPrice.value),
+          category: productCategory.value,
+          description: productDescription.value,
+          image: productImage.value,
+        };
+
+        const method = productId.value ? 'PUT' : 'POST';
+        let url = 'http://localhost:3000/products';
+        if (method === 'PUT') {
+          url += `/${productId.value}`;
+        }
+
+        fetch(url, {
+          method: method,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(product),
+        })
+          .then(response => response.json())
+          .then(() => {
+            productForm.reset();
+            productId.value = '';
+            loadProducts();
+          });
+      });
+
+      // Event listener for form submission (category)
+      categoryForm.addEventListener('submit', event => {
+        event.preventDefault();
+        const newCategoryName = newCategoryInput.value.trim();
+        if (newCategoryName) {
+          addCategory(newCategoryName);
+          newCategoryInput.value = ''; // Clear input after adding
+        }
+      });
+
+      // Function to edit product
+      function editProduct(id) {
+        fetch(`http://localhost:3000/products/${id}`)
+          .then(response => response.json())
+          .then(product => {
+            productName.value = product.name;
+            productPrice.value = product.price;
+            productCategory.value = product.category;
+            productDescription.value = product.description;
+            productImage.value = product.image;
+            productId.value = product.id;
+          });
+      }
+
+      // Function to delete product
+      function deleteProduct(id) {
+        fetch(`http://localhost:3000/products/${id}`, {
+          method: 'DELETE',
+        })
+          .then(() => loadProducts());
+      }
+
+      // Function to fetch and populate products
+function loadProducts() {
+  fetch('http://localhost:3000/products')
+    .then(response => response.json())
+    .then(products => {
+      const adminProductList = document.getElementById('admin-product-list');
+      adminProductList.innerHTML = '';
+      products.forEach(product => {
+        const tr = document.createElement('tr');
+        tr.className = 'bg-white';
+        tr.innerHTML = `
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm font-medium text-gray-900">${product.name}</div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm text-gray-900">Rp${product.price.toLocaleString()}</div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm text-gray-900">${product.category}</div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm text-gray-900">${product.description}</div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <img src="${product.image}" alt="${product.name}" class="w-32 h-auto">
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+            <div class="space-x-2">
+                  <button class="bg-blue-500 text-white px-2 py-1 rounded-md" onclick="editProduct('${product.id}')">Edit</button>
+                  <button class="bg-red-500 text-white px-2 py-1 rounded-md" onclick="deleteProduct('${product.id}')">Delete</button>
+                </div>
+          </td>
+        `;
+        adminProductList.appendChild(tr);
+      });
+    });
+}
+
+      // Initial fetch and load on DOMContentLoaded
+      fetchCategories();
+      loadProducts();
+    });
+
+    // Move editProduct and deleteProduct functions outside DOMContentLoaded
+    function editProduct(id) {
+      fetch(`http://localhost:3000/products/${id}`)
+        .then(response => response.json())
+        .then(product => {
+          document.getElementById('product-name').value = product.name;
+          document.getElementById('product-price').value = product.price;
+          document.getElementById('product-category').value = product.category;
+          document.getElementById('product-description').value = product.description;
+          document.getElementById('product-image').value = product.image;
+          document.getElementById('product-id').value = product.id;
+        });
+    }
+
+    function deleteProduct(id) {
+      fetch(`http://localhost:3000/products/${id}`, {
+        method: 'DELETE',
+      })
+        .then(() => loadProducts());
+    }
+
+    function loadProducts() {
+      fetch('http://localhost:3000/products')
+        .then(response => response.json())
+        .then(products => {
+          const adminProductList = document.getElementById('admin-product-list');
+          adminProductList.innerHTML = '';
+          products.forEach(product => {
+            const li = document.createElement('li');
+            li.className = 'flex justify-between items-center p-4 bg-gray-100 rounded-md';
+            li.innerHTML = `
+              <div>
+                <h3 class="text-xl font-bold">${product.name}</h3>
+                <p class="text-gray-600">${product.description}</p>
+                <p class="text-gray-600">${product.category}</p>
+                <p class="text-gray-600">Rp${product.price.toLocaleString()}</p>
+                <img src="${product.image}" alt="${product.name}" class="w-32 h-auto">
+              </div>
+              <div class="space-x-2">
+                <button class="bg-blue-500 text-white px-2 py-1 rounded-md" onclick="editProduct('${product.id}')">Edit</button>
+                <button class="bg-red-500 text-white px-2 py-1 rounded-md" onclick="deleteProduct('${product.id}')">Delete</button>
+              </div>
+            `;
+            adminProductList.appendChild(li);
+          });
+        });
+    }
+  </script>
+</body>
+</html>
